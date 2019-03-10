@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<head>
+	 <meta charset="utf-8">
+     <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">  -->
+     <link href="{{ url_for('static', filename='css/upload.css') }}" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+</head>
+<html>
+<body>
+	<div class="custom-file">
+  <input type="file" class="custom-file-input" id="customFile">
+  <label class="custom-file-label" for="customFile">Choose file</label>
+</div>
+		
+ <h1>File Uploader</h1>
+    <form id="upload-form" action="{{url_for('upload') }}" class="filestyle"  method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*" multiple data-icon="false">
+        <input type="submit" value="send">
+    </form>
+
+
+
+<div class="file-upload">
+	<form id="upload-form" action="{{url_for('upload') }}" class="filestyle"  method="POST" enctype="multipart/form-data">
+    <label for="upload" class="file-upload__label">Css only file upload button</label>
+    <input type="file" id="upload" class="file-upload__input"  accept="image/*" multiple data-icon="false" name="file">
+     <button name="submit" class="btn btn-info" value="submit" type="submit"><i class="fas fa-arrow-right"></i></button>
+</form>
+</div>
+</body>
+</html>

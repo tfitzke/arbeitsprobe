@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Index</title>
+    <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!-- Standard Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- bootstrap tags -->
+    <link rel="stylesheet" href="assets/dist/bootstrap-tagsinput.css" />
+
+    <!-- own css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/gallery.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/modal.css') }}">
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- fonts -->
+ <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates:600" rel="stylesheet">
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Upload Button Bereich -->
+        <div class="top_uploading">
+            <!-- Trigger/Open The Modal -->
+            <button class="btn" id="myBtn"><i class="fas fa-cloud-upload-alt"></i></button>
+        </div> 
+        <!-- Div ".content" wird per Javascript mit Images gefüllt -->
+        <div class="content">
+        </div>
+    </div>
+
+    <!-- Modal für Uploads -->
+    <div id="myModal" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="file-upload">
+                <form id="upload-form" action="{{url_for('upload') }}" class="filestyle"  method="POST" enctype="multipart/form-data">
+                    <label for="upload" class="btn btn-default">Select Files</label>
+                    <input id="upload" class="file-upload__input margin2" type="file" accept="image/*" multiple data-icon="false" name="file">
+                <button name="submit" class="btn btn-success margin2" value="submit" type="submit">Upload <!--  <i class="fas fa-arrow-right"> --></i></button>
+                </form>
+            </div>
+            <span class="close">&times;</span>
+        </div>
+    </div>
+
+<!-- Der JS-Code ist aufgrund von Problemen mit jinja2 und der Größenbemessung der Images in der HTML Datei -->
+<script type="text/javascript">
+$( document ).ready(function() {
+    /* Annahme des JSON-Files mit allen Images vom Server*/
+    var allImages = {{image_names| tojson |safe}};
+    var activeImages = [];
+    /* Auto-fit bei weniger als 3 Fotos streckt die Fotos zu sehr, auto-fill behält responsiveness aber bei (nicht bei allen Bildformaten optimal)*/
+    if (allImages.length>=3){
+        $(".content").addClass("auto-fit");
+        console.log(allImages.length);
+    } else {
+        $(".content").addClass("auto-fill");
+        console.log(allImages.length);
+    }
+    /* Bilder werden je nach Resolution unterschiedliche Gridgrößen zugeordnet */
+    for (var i = 0; i< allImages.length; i++){
+        var img_size = 1;
+        var div = document.createElement('div');
+        var img = new Image();
+        img.onload = function() {
+            ratio = this.naturalWidth/this.naturalHeight;
+                this.className = "wh";
+            /* Große Bilder werden gekennzeichnet */
+            if (this.naturalHeight >= 3000  || this.naturalHeight >= 3000){
+                img_size = 2;
+            }
+            if (ratio >= 2){
+                this.parentNode.className = "panorama off";
+            /* bei einem "normalen" Seitenverhältnis, bestimmt die Auflösung über die Gridgröße*/
+            } else if (2 > ratio && ratio >= 1.22){
+                if (img_size == 1){
+                    this.parentNode.className = "normal off";
+                } else if (img_size == 2){   
+                    this.parentNode.className = "big off";
+                }
+            } else if (1.22 > ratio && ratio >= 0.88) {
+                this.parentNode.className = "normal off";
+            } else if (0.88 > ratio){
+                this.parentNode.className = "long off";
+  }
+ };
+        image_source = "upload/"+allImages[i];
+        img.src = image_source;
+        div.append(img);
+        /* Bildclick führt zu imageView/<imageName>*/
+        div.onclick = function(){
+            activeUrl = $(this).children()[0].src;
+            url_array = activeUrl.split("/");
+            photoPath = url_array[url_array.length-1];
+            window.location.href = "imageView/" + photoPath;
+        }
+    $(".content").append(div);  
+    }
+});
+</script>
+</body>
+</html>

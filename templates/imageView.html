@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <!-- Standard Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- bootstrap tags -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-tagsinput.css') }}" />
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- Eigenes css und JS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/imageView.css') }}">
+    <script src="{{ url_for('static', filename='js/imageView.js') }}"></script>
+    <!-- fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Cabin" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat+Alternates:600" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Umgebender container für responsiveness und grid -->
+    <div class="contain">
+        <!-- Previous image button -->
+        <a href="{{url_for('imageView', filename = prev_img)}}" class="left"><div>&#10094</div></a>
+        <!-- Image click zurück zur Gallerie -->
+        <div class="image">
+            <a href="{{url_for('gallery')}}"><img src="{{url_for('send_image', filename= data_container.imageName )}}" alt="{{ filename }}" class="mainimg"></a>
+        </div>
+        <!-- formField zum Schreiben und submitten der tags -->
+        <div class="formField">
+            <form action="/" method="POST" class= "form-inline margin2" style="padding: 5px">
+                <input type="text" name="tagsinput" id="tags-input" class="form-control">
+                <input type="BUTTON" value="Save" class="btn btn-success">
+            </form>
+        </div>
+        <!-- Div für die tags des images -->
+        <div class="tags">
+        </div> 
+        <!-- Next image button -->
+        <a href="{{url_for('imageView',filename = next_img)}}"  class="right"><div >&#10095</div></a>
+  </div>  
+
+<!-- Der meiste JS-Code ist aufgrund von Problemen mit jinja2 in der HTML Datei -->
+<script>
+$( document ).ready(function() {
+    /* Annahme des JSON-Files vom Server*/
+    var data_container = ({{data_container| tojson |safe}});
+    
+    /* Tags vom Image laden (siehe imageView.js) */
+    init_tags(data_container);
+    /* Formbutton sendet Tagnamen von input mit id="tags-input" an Server */
+    $('.btn').click(function() {
+        tagSerialized = $("#tags-input").serialize();
+        /* Form String muss decoded werden, bevor er weiterverwendet wird (Umlaute etc, siehe imageView.js)*/
+        tagName = cleanFormValue(tagSerialized);
+        var url = window.location.pathname;   
+        url_array = url.split("/");
+        photoPath = url_array[url_array.length-1];
+        /* Tagname und aktives image wird per ajax an Server gesendet*/
+        var data = {
+            "newTag":  tagName,
+            "photoName": photoPath
+        };
+        if (data  && data.newTag.length > 0){
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                url: '/addTag',
+                success: function (e) {
+                  console.log(e);
+                  window.location('/addTag');
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+            addTag(data.newTag, data_container);
+        } else {
+            console.log("Tag undefined");
+        }
+    });
+    /* Enterdruck muss in input mit id="tags-input" gehandelt werden, da die Defaultfunktion des Buttons durch ajax ausgetauscht wurde */
+    document.getElementById('tags-input').addEventListener('keypress', function(event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            if ($("#tags-input").serialize()){
+                $('.btn').click();
+            }
+        }
+    });
+  });
+</script>
+</body>
+</html>

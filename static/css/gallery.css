@@ -1,0 +1,208 @@
+body {
+	
+}
+@media screen and (max-width: 760px){
+.container {
+  display: grid;
+  width: 720px;
+  grid-template-columns:  auto;
+  grid-template-rows:  1fr 80px;
+  height: 100vh;
+  grid-template-areas:
+  " c "
+  " d " ;
+	overflow-y: hidden;
+}
+}
+
+@media screen and (min-width: 760px){
+.container {
+  display: grid;
+  width: 750px;
+  grid-template-columns:  auto;
+  grid-template-rows:  1fr 80px;
+  height: 100vh;
+  grid-template-areas:
+  " c "
+  " d " ;
+	overflow-y: hidden;
+}
+}
+
+
+@media screen and (min-width: 992px){
+	.container {
+  display: grid;
+  width: 970px;
+  grid-template-columns:  auto;
+  grid-template-rows:  80px 1fr;
+  height: 100vh;
+  grid-template-areas:
+  " d " 
+  " c ";
+	overflow-y: hidden;
+}
+}
+@media screen and (min-width: 1170px){
+.container {
+  display: grid;
+  width: 1170px;
+  grid-template-columns:  auto;
+  grid-template-rows: 80px 1fr;
+  height: 100vh;
+  grid-template-areas:
+  " d "
+  " c " ;
+	overflow-y: hidden;
+}
+}
+
+
+a {
+  text-decoration: none;
+  color: rgb(40,40,40);
+   font-weight: bold;
+}
+a:hover {
+  text-decoration: none;
+}
+
+
+::-webkit-scrollbar {
+    width: 0px;  /* remove scrollbar space */
+    background: transparent;  /* optional: just make scrollbar invisible */
+}
+::-webkit-scrollbar-thumb {
+    background: black;
+}
+
+.top_uploading {
+	grid-area: d;
+	display: flex;
+	padding: 5px;
+	flex-direction: row;
+	justify-content: center;
+
+}
+.content {
+  grid-area: c;
+  display: grid;
+  grid-auto-rows: 55px;
+  grid-gap: 5px;
+  grid-auto-flow: dense;
+  overflow-y: scroll;
+}
+
+.auto-fit {
+	grid-template-columns:repeat(auto-fit, minmax(55px, 1fr));
+}
+.auto-fill {
+	grid-template-columns: repeat(auto-fill, minmax(55px, 1fr));
+}
+
+.content > div > img {
+
+  object-fit: cover;
+  border-radius: 3px;
+}
+.panorama {
+  grid-column: span 8;
+  grid-row: span 3;
+}
+.square {
+grid-column: span 4;
+ grid-row: span 4;
+}
+
+.normal {
+ grid-column: span 4;
+  grid-row: span 3;
+}
+.big {
+	grid-column: span 8;
+	grid-row: span 6;
+}
+.long {
+grid-column: span 4;
+  grid-row: span 6;
+}
+.maxlong {
+  grid-row: span 4;
+  grid-column: span 8;
+}
+
+.hidden {
+  visibility: hidden;
+}
+.wh {
+  height: 100%;
+  width: 100%;
+}
+.active {
+  opacity: 0.5;
+  -webkit-transition: .1s ease-in-out;
+  transition: .1s ease-in-out;
+}
+.off:hover {
+	cursor: pointer ;
+  opacity: 0.9;
+  -webkit-transition: .1s ease-in-out;
+  transition: .1s ease-in-out;
+  -webkit-transform: scale(0.95);
+  transform: scale(0.95);
+}
+.off {
+  opacity: 1;
+  -webkit-transition: .1s ease-in-out;
+  transition: .1s ease-in-out;
+}
+
+.file-upload {
+	/* position: relative; */
+	display: inline-block;
+  width: 100%;
+}
+
+.file-upload__label {
+  display: block;
+  padding: 1em 2em;
+  color: #fff;
+  background: #222;
+  border-radius: .4em;
+  transition: background .3s;
+  cursor: pointer;
+  
+}
+    
+.file-upload__input {
+    /* position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0; */
+    font-size: 1;
+    width:0;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+form {
+	 display: flex;
+    flex: 1;
+    text-align: center;
+    align-items: center;
+    justify-content:center;
+}
+.margin2 {
+  margin: 2px;
+}
+label {
+  margin-bottom: 0;
+}
+#myBtn {
+  width: 100%;
+  background-color: white;
+}
+.fa-cloud-upload-alt {
+  font-size: 200%;
+}
